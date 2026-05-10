@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-kafka-sample",
+  "type": "module",
+  "license": "MIT",
+  "author": "Mark Wayne B. Menorca",
+  "version": "0.0.1",
+  "scripts": {
+    "admin": "tsx admin.ts",
+    "producer": "tsx producer.ts",
+    "consumer": "tsx consumer.ts"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
