@@ -11,6 +11,7 @@ graph TD
     Admin[Admin Script] -->|Creates Topic: file-upload| Kafka((Kafka Broker))
     Producer[Producer Script] -->|Sends File Upload Events| Kafka
     Kafka -->|Streams Events| Consumer[Consumer Script]
+    Kafka ---|Web Management| KafkaUI[Kafka UI]
     
     subgraph "Node.js Application"
         Admin
@@ -18,8 +19,9 @@ graph TD
         Consumer
     end
     
-    subgraph "Kafka Infrastructure"
+    subgraph "Kafka Infrastructure (Docker)"
         Kafka
+        KafkaUI
     end
 ```
 
@@ -36,16 +38,20 @@ Kafka is a distributed streaming platform that allows you to publish and subscri
 3.  **Consumer ([consumer.ts](consumer.ts))**: 
     *   Simulates a downstream service (e.g., an image processing or virus scanning service).
     *   Subscribes to the `file-upload` topic and logs the incoming metadata.
+4.  **Kafka UI**: 
+    *   A web-based management interface for monitoring and managing the Kafka cluster.
+    *   Accessible at [http://localhost:8080](http://localhost:8080).
+    *   Allows you to browse topics, view messages, monitor consumer groups, and inspect broker configuration.
 
 ## Prerequisites
 
 *   Node.js installed.
-*   Docker and Docker Compose installed (to run the Kafka broker).
+*   Docker and Docker Compose installed (to run the Kafka broker and UI).
 
 ## Getting Started
 
-1.  **Start Kafka**:
-    Use Docker Compose to start the Kafka broker and Zookeeper:
+1.  **Start Kafka and Kafka UI**:
+    Use Docker Compose to start the Kafka broker (KRaft mode, no Zookeeper needed) and the web UI:
     ```bash
     docker-compose up -d
     ```
@@ -73,13 +79,15 @@ Kafka is a distributed streaming platform that allows you to publish and subscri
     npm run producer
     ```
 
+6.  **Open Kafka UI**:
+    Navigate to [http://localhost:8080](http://localhost:8080) in your browser to view topics, messages, and consumer groups.
+
 ## Stopping the Server
 
-When you're done, you can stop the Kafka server with:
+When you're done, you can stop all services with:
 ```bash
 docker-compose down
 ```
-
 
 You should see the messages sent by the producer appearing in the consumer's terminal output.
 
@@ -88,3 +96,5 @@ You should see the messages sent by the producer appearing in the consumer's ter
 *   **TypeScript**: Provides type safety and better developer experience.
 *   **kafkajs**: A modern Kafka client for Node.js.
 *   **tsx**: Fast TypeScript execution without a separate build step.
+*   **Apache Kafka (KRaft)**: Lightweight Kafka image running in KRaft mode (no Zookeeper dependency).
+*   **Kafka UI**: Web-based management interface for Kafka ([provectuslabs/kafka-ui](https://github.com/provectus/kafka-ui)).
