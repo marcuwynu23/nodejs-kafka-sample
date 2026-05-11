@@ -7,22 +7,22 @@ This project demonstrates a common use case of Apache Kafka in a Node.js environ
 The following Mermaid diagram illustrates the data flow between the different components of this sample project:
 
 ```mermaid
-graph TD
-    Admin[Admin Script] -->|Creates Topic: file-upload| Kafka((Kafka Broker))
-    Producer[Producer Script] -->|Sends File Upload Events| Kafka
-    Kafka -->|Streams Events| Consumer[Consumer Script]
-    Kafka ---|Web Management| KafkaUI[Kafka UI]
-    
-    subgraph "Node.js Application"
-        Admin
-        Producer
-        Consumer
-    end
-    
-    subgraph "Kafka Infrastructure (Docker)"
-        Kafka
-        KafkaUI
-    end
+sequenceDiagram
+    participant Admin as Admin Script
+    participant Kafka as Kafka Broker
+    participant Producer as Producer 
+    participant Consumer as Consumer 
+    participant UI as Kafka UI
+
+    Admin->>Kafka: Create topic "file-upload"
+    Kafka-->>Admin: Topic created
+
+    Producer->>Kafka: Send file upload event (fileId, fileName, status)
+    Kafka-->>Consumer: Stream event to consumer group
+    Consumer->>Consumer: Process file metadata
+
+    UI->>Kafka: Query topics, messages, consumer groups
+    Kafka-->>UI: Return cluster data
 ```
 
 ## How It Works
